@@ -1,29 +1,26 @@
 /**
- * OOPSBannerApp UC1 - OOPS Banner Display Application
+ * OOPSBannerApp UC3 - OOPS Banner Application (Use Case 3)
  *
- * This class demonstrates a simple Java application that displays the Object
- * Oriented Programming System (OOPS) acronym to the console.
+ * This class extends the functionality of Use Case 2 by improving the way the "OOPS" banner
+ * is constructed and displayed. It focuses on enhancing code readability and efficiency
+ * by utilizing the String.join() method to create each line of the banner. This approach
+ * overcomes the drawbacks of using the + operator for string concatenation, which can lead
+ * to code inefficiency due to the creation of multiple intermediate String objects in memory.
  *
  * @author Shourya Parashar
- * @version 2.0
+ * @version 3.0
  */
 public class App {
-
-    /**
-     * The main entry point of the application.
-     * Displays the OOPS acronym as ASCII art to the console.
-     *
-     * @param args Command-line arguments (not used)
-     */
     public static void main(String[] args) {
+        // Use System.out.println() to print each line of the OOPS banner.
+        // Construct each line using String.join() method for better readability and efficiency.
 
-        // Display OOPS ASCII Art Banner
-        System.out.println("      ***      ***      *****       *****      ");
-        System.out.println("     ** **    ** **    **   **    **           ");
-        System.out.println("    **   **  **   **   **   **   **            ");
-        System.out.println("    **   **  **   **   *****      ***          ");
-        System.out.println("    **   **  **   **   **            **        ");
-        System.out.println("     ** **    ** **    **             **       ");
-        System.out.println("      ***      ***     **        *****         ");
+        System.out.println(String.join("", "      ***   ", "   ***    ", "  *****   ", "  *****  "));
+        System.out.println(String.join("", "     ** **  ", "  ** **   ", " **   **  ", " **      "));
+        System.out.println(String.join("", "    **   ** ", " **   **  ", " **   **  ", " **      "));
+        System.out.println(String.join("", "    **   ** ", " **   **  ", " *****    ", "  *****  "));
+        System.out.println(String.join("", "    **   ** ", " **   **  ", " **       ", "      ** "));
+        System.out.println(String.join("", "     ** **  ", "  ** **   ", " **       ", " **   ** "));
+        System.out.println(String.join("", "      ***   ", "   ***    ", " **       ", "  *****  "));
     }
 }
