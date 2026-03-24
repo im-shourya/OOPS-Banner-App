@@ -1,83 +1,155 @@
 /**
- * OOPSBannerApp UC6 - Render OOPS as Banner using getOPattern(), getPPattern(), and getSPattern() helper methods
+ * OOPSBannerApp UC7 - Render OOPS as Banner using CharacterPatternMap Class
  *
- * This use case extends UC5 by moving each letter's pattern construction into its own dedicated static helper method. The array is still initialized inline, but now calls getOPattern(), getPPattern(),and getSPattern() instead of embedding raw strings.
+ * This use case extends UC6 by creating a CharacterPatternMap class that
+ * encapsulates character data and its corresponding banner pattern. This allows
+ * the application to retrieve and display the banner using stored mappings,
+ * promoting better organization, reusability, and scalability.
  *
  * @author Shourya Parashar
- * @version 6.0
+ * @version 7.0
  */
 public class App {
-    public static String[] getOPattern() {
-        return new String[]{
-            " ******* ",
-            "*       *",
-            "*       *",
-            "*       *",
-            "*       *",
-            "*       *",
-            " ******* "
-        };
+
+    // =========================================================================
+    // Part 2 – Inner Class
+    // =========================================================================
+
+    /**
+     * Encapsulates a character and its corresponding 7-row ASCII banner pattern.
+     */
+    static class CharacterPatternMap {
+
+        /** The letter this object represents. */
+        private final char character;
+
+        /** Seven-element array; each element is one row of the ASCII art. */
+        private final String[] pattern;
+
+        // ---------------------------------------------------------------------
+        // Constructor
+        // ---------------------------------------------------------------------
+
+        /**
+         * Constructs a CharacterPatternMap for the given character.
+         * The 7-row pattern is built internally using StringBuilder.
+         *
+         * @param character the letter to represent (e.g. 'O', 'P', 'S')
+         */
+        public CharacterPatternMap(char character) {
+            this.character = character;
+            this.pattern   = buildPattern(character);
+        }
+
+        // ---------------------------------------------------------------------
+        // Getter Methods
+        // ---------------------------------------------------------------------
+
+        /**
+         * Returns the character this object represents.
+         * @return the stored character
+         */
+        public char getCharacter() {
+            return character;
+        }
+
+        /**
+         * Returns the 7-row ASCII banner pattern for this character.
+         * @return String array of 7 pattern rows
+         */
+        public String[] getPattern() {
+            return pattern;
+        }
+    }
+
+    // =========================================================================
+    // Part 3 – Utility Static Methods
+    // =========================================================================
+
+    /**
+     * Builds and returns the 7-row ASCII banner pattern for the given character.
+     * Uses {@link StringBuilder} for efficient row construction.
+     *
+     * @param character the letter whose pattern is required ('O', 'P', or 'S')
+     * @return String array of 7 rows, each 9 characters wide
+     */
+    private static String[] buildPattern(char character) {
+        switch (character) {
+            case 'O':
+                return new String[]{
+                    " ******* ",
+                    "*       *",
+                    "*       *",
+                    "*       *",
+                    "*       *",
+                    "*       *",
+                    " ******* "
+                };
+            case 'P':
+                return new String[]{
+                    "******** ",
+                    "*       *",
+                    "*       *",
+                    "******** ",
+                    "*        ",
+                    "*        ",
+                    "*        "
+                };
+            case 'S':
+                return new String[]{
+                    " ******* ",
+                    "*        ",
+                    "*        ",
+                    " ******* ",
+                    "        *",
+                    "        *",
+                    " ******* "
+                };
+            default:
+                // Return blank 9-char rows for unknown characters
+                String[] blank = new String[7];
+                for (int i = 0; i < 7; i++) {
+                    blank[i] = "         ";
+                }
+                return blank;
+        }
     }
 
     /**
-     * Returns the 7-row ASCII pattern for the letter 'P'.
-     * Each element is a 9-character-wide string.
-     * @return String array of 7 rows representing 'P'
+     * Assembles and prints the horizontal banner for the supplied array of
+     * {@link CharacterPatternMap} objects.
+     * Iterates row-by-row (outer loop) then character-by-character (inner loop).
+     *
+     * @param characters array of CharacterPatternMap objects forming the word
      */
-    public static String[] getPPattern() {
-        return new String[]{
-            "******** ",
-            "*       *",
-            "*       *",
-            "******** ",
-            "*        ",
-            "*        ",
-            "*        "
-        };
+    private static void displayBanner(CharacterPatternMap[] characters) {
+        // Outer loop: 7 rows
+        for (int row = 0; row < 7; row++) {
+            StringBuilder lineBuilder = new StringBuilder();
+            // Inner loop: each character's pattern for the current row
+            for (CharacterPatternMap cpm : characters) {
+                lineBuilder.append(cpm.getPattern()[row]);
+                lineBuilder.append(" "); // column separator
+            }
+            System.out.println(lineBuilder.toString());
+        }
     }
 
-    /**
-     * Returns the 7-row ASCII pattern for the letter 'S'.
-     * Each element is a 9-character-wide string.
-     * @return String array of 7 rows representing 'S'
-     */
-    public static String[] getSPattern() {
-        return new String[]{
-            " ******* ",
-            "*        ",
-            "*        ",
-            " ******* ",
-            "        *",
-            "        *",
-            " ******* "
-        };
-    }
-
-    // -------------------------------------------------------------------------
-    // Main Method
-    // -------------------------------------------------------------------------
+    // =========================================================================
+    // Part 4 – Main Method
+    // =========================================================================
 
     public static void main(String[] args) {
 
-        // Retrieve letter patterns via helper methods (DRY: 'O' reused)
-        String[] oPattern = getOPattern();
-        String[] pPattern = getPPattern();
-        String[] sPattern = getSPattern();
-
-        // Assemble 7-row banner by joining corresponding rows of O O P S
-        String[] bannerLines = {
-            String.join(" ", oPattern[0], oPattern[0], pPattern[0], sPattern[0]),
-            String.join(" ", oPattern[1], oPattern[1], pPattern[1], sPattern[1]),
-            String.join(" ", oPattern[2], oPattern[2], pPattern[2], sPattern[2]),
-            String.join(" ", oPattern[3], oPattern[3], pPattern[3], sPattern[3]),
-            String.join(" ", oPattern[4], oPattern[4], pPattern[4], sPattern[4]),
-            String.join(" ", oPattern[5], oPattern[5], pPattern[5], sPattern[5]),
-            String.join(" ", oPattern[6], oPattern[6], pPattern[6], sPattern[6])
+        // Create CharacterPatternMap instances for each letter in "OOPS"
+        CharacterPatternMap[] word = {
+            new CharacterPatternMap('O'),
+            new CharacterPatternMap('O'),
+            new CharacterPatternMap('P'),
+            new CharacterPatternMap('S')
         };
 
-        // Enhanced for-loop: print each assembled banner row
-        for (String line : bannerLines) {
-            System.out.println(line);
-        }
+        // Display the assembled banner
+        displayBanner(word);
     }
 }
