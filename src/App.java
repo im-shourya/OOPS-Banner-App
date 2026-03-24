@@ -1,32 +1,82 @@
 /**
- * OOPSBannerApp UC5 - Render OOPS as Banner using Inline Array Initialization
+ * OOPSBannerApp UC6 - Render OOPS as Banner using getOPattern(), getPPattern(), and getSPattern() helper methods
  *
- * This use case extends UC4 by defining and populating the String array in a more
- * concise way at the time of declaration using String.join() method to create each
- * line of the banner. This further enhances code readability and maintainability.
+ * This use case extends UC5 by moving each letter's pattern construction into its own dedicated static helper method. The array is still initialized inline, but now calls getOPattern(), getPPattern(),and getSPattern() instead of embedding raw strings.
  *
  * @author Shourya Parashar
- * @version 5.0
+ * @version 6.0
  */
 public class App {
+    public static String[] getOPattern() {
+        return new String[]{
+            " ******* ",
+            "*       *",
+            "*       *",
+            "*       *",
+            "*       *",
+            "*       *",
+            " ******* "
+        };
+    }
+
+    /**
+     * Returns the 7-row ASCII pattern for the letter 'P'.
+     * Each element is a 9-character-wide string.
+     * @return String array of 7 rows representing 'P'
+     */
+    public static String[] getPPattern() {
+        return new String[]{
+            "******** ",
+            "*       *",
+            "*       *",
+            "******** ",
+            "*        ",
+            "*        ",
+            "*        "
+        };
+    }
+
+    /**
+     * Returns the 7-row ASCII pattern for the letter 'S'.
+     * Each element is a 9-character-wide string.
+     * @return String array of 7 rows representing 'S'
+     */
+    public static String[] getSPattern() {
+        return new String[]{
+            " ******* ",
+            "*        ",
+            "*        ",
+            " ******* ",
+            "        *",
+            "        *",
+            " ******* "
+        };
+    }
+
+    // -------------------------------------------------------------------------
+    // Main Method
+    // -------------------------------------------------------------------------
+
     public static void main(String[] args) {
 
-        // Define String Array variable to hold the OOPS banner lines
-        // Each line represents a row in the banner for the letters O, O, P, S
-        // Declared and initialized inline in a single statement using array literal syntax
-        String[] lines = {
-            String.join("", "      ***   ", "   ***    ", "  *****   ", "  *****  "),
-            String.join("", "     ** **  ", "  ** **   ", " **   **  ", " **      "),
-            String.join("", "    **   ** ", " **   **  ", " **   **  ", " **      "),
-            String.join("", "    **   ** ", " **   **  ", " *****    ", "  *****  "),
-            String.join("", "    **   ** ", " **   **  ", " **       ", "      ** "),
-            String.join("", "     ** **  ", "  ** **   ", " **       ", " **   ** "),
-            String.join("", "      ***   ", "   ***    ", " **       ", "  *****  ")
+        // Retrieve letter patterns via helper methods (DRY: 'O' reused)
+        String[] oPattern = getOPattern();
+        String[] pPattern = getPPattern();
+        String[] sPattern = getSPattern();
+
+        // Assemble 7-row banner by joining corresponding rows of O O P S
+        String[] bannerLines = {
+            String.join(" ", oPattern[0], oPattern[0], pPattern[0], sPattern[0]),
+            String.join(" ", oPattern[1], oPattern[1], pPattern[1], sPattern[1]),
+            String.join(" ", oPattern[2], oPattern[2], pPattern[2], sPattern[2]),
+            String.join(" ", oPattern[3], oPattern[3], pPattern[3], sPattern[3]),
+            String.join(" ", oPattern[4], oPattern[4], pPattern[4], sPattern[4]),
+            String.join(" ", oPattern[5], oPattern[5], pPattern[5], sPattern[5]),
+            String.join(" ", oPattern[6], oPattern[6], pPattern[6], sPattern[6])
         };
 
-        // Use a for-each loop to iterate through the array and print each line
-        // visual effect for the message "OOPS"
-        for (String line : lines) {
+        // Enhanced for-loop: print each assembled banner row
+        for (String line : bannerLines) {
             System.out.println(line);
         }
     }
