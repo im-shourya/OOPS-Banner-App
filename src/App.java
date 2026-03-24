@@ -1,155 +1,102 @@
+import java.util.HashMap;
+import java.util.Map;
+
 /**
- * OOPSBannerApp UC7 - Render OOPS as Banner using CharacterPatternMap Class
+ * OOPSBannerApp UC8 - Render OOPS as Banner using Map for Character Patterns
  *
- * This use case extends UC6 by creating a CharacterPatternMap class that
- * encapsulates character data and its corresponding banner pattern. This allows
- * the application to retrieve and display the banner using stored mappings,
- * promoting better organization, reusability, and scalability.
+ * This use case extends UC7 by replacing CharacterPatternMap class with
+ * a HashMap data structure for efficient character pattern storage and retrieval.
  *
  * @author Shourya Parashar
- * @version 7.0
+ * @version 8.0
  */
 public class App {
 
     // =========================================================================
-    // Part 2 – Inner Class
+    // Part 2 – Utility Static Methods for Map Initialization
     // =========================================================================
 
     /**
-     * Encapsulates a character and its corresponding 7-row ASCII banner pattern.
+     * Builds and returns a HashMap linking characters to their 7-row ASCII patterns.
+     * @return Map of Character to String array
      */
-    static class CharacterPatternMap {
+    public static Map<Character, String[]> buildPatternMap() {
 
-        /** The letter this object represents. */
-        private final char character;
+        Map<Character, String[]> patternMap = new HashMap<>();
 
-        /** Seven-element array; each element is one row of the ASCII art. */
-        private final String[] pattern;
+        // Pattern for letter 'O'
+        patternMap.put('O', new String[]{
+            " ******* ",
+            "*       *",
+            "*       *",
+            "*       *",
+            "*       *",
+            "*       *",
+            " ******* "
+        });
 
-        // ---------------------------------------------------------------------
-        // Constructor
-        // ---------------------------------------------------------------------
+        // Pattern for letter 'P'
+        patternMap.put('P', new String[]{
+            "******** ",
+            "*       *",
+            "*       *",
+            "******** ",
+            "*        ",
+            "*        ",
+            "*        "
+        });
 
-        /**
-         * Constructs a CharacterPatternMap for the given character.
-         * The 7-row pattern is built internally using StringBuilder.
-         *
-         * @param character the letter to represent (e.g. 'O', 'P', 'S')
-         */
-        public CharacterPatternMap(char character) {
-            this.character = character;
-            this.pattern   = buildPattern(character);
-        }
+        // Pattern for letter 'S'
+        patternMap.put('S', new String[]{
+            " ******* ",
+            "*        ",
+            "*        ",
+            " ******* ",
+            "        *",
+            "        *",
+            " ******* "
+        });
 
-        // ---------------------------------------------------------------------
-        // Getter Methods
-        // ---------------------------------------------------------------------
-
-        /**
-         * Returns the character this object represents.
-         * @return the stored character
-         */
-        public char getCharacter() {
-            return character;
-        }
-
-        /**
-         * Returns the 7-row ASCII banner pattern for this character.
-         * @return String array of 7 pattern rows
-         */
-        public String[] getPattern() {
-            return pattern;
-        }
-    }
-
-    // =========================================================================
-    // Part 3 – Utility Static Methods
-    // =========================================================================
-
-    /**
-     * Builds and returns the 7-row ASCII banner pattern for the given character.
-     * Uses {@link StringBuilder} for efficient row construction.
-     *
-     * @param character the letter whose pattern is required ('O', 'P', or 'S')
-     * @return String array of 7 rows, each 9 characters wide
-     */
-    private static String[] buildPattern(char character) {
-        switch (character) {
-            case 'O':
-                return new String[]{
-                    " ******* ",
-                    "*       *",
-                    "*       *",
-                    "*       *",
-                    "*       *",
-                    "*       *",
-                    " ******* "
-                };
-            case 'P':
-                return new String[]{
-                    "******** ",
-                    "*       *",
-                    "*       *",
-                    "******** ",
-                    "*        ",
-                    "*        ",
-                    "*        "
-                };
-            case 'S':
-                return new String[]{
-                    " ******* ",
-                    "*        ",
-                    "*        ",
-                    " ******* ",
-                    "        *",
-                    "        *",
-                    " ******* "
-                };
-            default:
-                // Return blank 9-char rows for unknown characters
-                String[] blank = new String[7];
-                for (int i = 0; i < 7; i++) {
-                    blank[i] = "         ";
-                }
-                return blank;
-        }
+        return patternMap;
     }
 
     /**
-     * Assembles and prints the horizontal banner for the supplied array of
-     * {@link CharacterPatternMap} objects.
-     * Iterates row-by-row (outer loop) then character-by-character (inner loop).
+     * Renders a multi-character horizontal banner to the console.
+     * Uses nested loops: outer iterates the 7 rows; inner retrieves each
+     * character's pattern from the map and appends it to a StringBuilder.
      *
-     * @param characters array of CharacterPatternMap objects forming the word
+     * @param word       the word to display (e.g. "OOPS")
+     * @param patternMap map of Character → 7-row pattern array
      */
-    private static void displayBanner(CharacterPatternMap[] characters) {
-        // Outer loop: 7 rows
+    public static void displayBanner(String word, Map<Character, String[]> patternMap) {
+
+        // Outer loop: iterate through each of the 7 banner rows
         for (int row = 0; row < 7; row++) {
             StringBuilder lineBuilder = new StringBuilder();
-            // Inner loop: each character's pattern for the current row
-            for (CharacterPatternMap cpm : characters) {
-                lineBuilder.append(cpm.getPattern()[row]);
-                lineBuilder.append(" "); // column separator
+
+            // Inner loop: for every character in the word, look up its row
+            for (char c : word.toCharArray()) {
+                String[] pattern = patternMap.get(c);
+                if (pattern != null) {
+                    lineBuilder.append(pattern[row]);
+                    lineBuilder.append(" "); // column separator
+                }
             }
+
             System.out.println(lineBuilder.toString());
         }
     }
 
     // =========================================================================
-    // Part 4 – Main Method
+    // Part 3 – Main Method
     // =========================================================================
 
     public static void main(String[] args) {
 
-        // Create CharacterPatternMap instances for each letter in "OOPS"
-        CharacterPatternMap[] word = {
-            new CharacterPatternMap('O'),
-            new CharacterPatternMap('O'),
-            new CharacterPatternMap('P'),
-            new CharacterPatternMap('S')
-        };
+        // Build the character-to-pattern HashMap
+        Map<Character, String[]> patternMap = buildPatternMap();
 
-        // Display the assembled banner
-        displayBanner(word);
+        // Render the banner for the word "OOPS"
+        displayBanner("OOPS", patternMap);
     }
 }
